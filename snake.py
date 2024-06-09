@@ -28,6 +28,23 @@ class Snake(pygame.sprite.Sprite):
         self.previous_positions = [(250, 200), (300, 200), (350, 200), (400, 200)]
         self.next_move_possible = True
 
+    def _wall_collision(self):
+        if self.direction == Direction.RIGHT:
+            if self.rect.x + SNAKE_SIZE >= self.surface_width:
+                return True
+
+        if self.direction == Direction.LEFT:
+            if self.rect.x - SNAKE_SIZE < 0:
+                return True
+
+        if self.direction == Direction.UP:
+            if self.rect.y - SNAKE_SIZE < 0:
+                return True
+
+        if self.direction == Direction.DOWN:
+            if self.rect.y + SNAKE_SIZE >= self.surface_height:
+                return True
+
     def player_input(self):
         if self.next_move_possible:
             keys = pygame.key.get_pressed()
@@ -57,25 +74,25 @@ class Snake(pygame.sprite.Sprite):
         if self.divider % LEVEL_SPEED == 0:
             self.next_move_possible = True
             if self.direction == Direction.RIGHT:
-                if self.rect.x + SNAKE_SIZE >= self.surface_width:
+                if self._wall_collision():
                     self.rect.x = 0
                 else:
                     self.rect.x += SNAKE_SIZE
 
             if self.direction == Direction.LEFT:
-                if self.rect.x - SNAKE_SIZE < 0:
+                if self._wall_collision():
                     self.rect.x = self.surface_width - SNAKE_SIZE
                 else:
                     self.rect.x -= SNAKE_SIZE
 
             if self.direction == Direction.UP:
-                if self.rect.y - SNAKE_SIZE < 0:
+                if self._wall_collision():
                     self.rect.y = self.surface_height - SNAKE_SIZE
                 else:
                     self.rect.y -= SNAKE_SIZE
 
             if self.direction == Direction.DOWN:
-                if self.rect.y + SNAKE_SIZE >= self.surface_height:
+                if self._wall_collision():
                     self.rect.y = 0
                 else:
                     self.rect.y += SNAKE_SIZE

@@ -1,8 +1,5 @@
-from typing import Any
 import pygame
 from sys import exit
-from math import floor
-from random import randint, choice
 from snake import Snake
 from obstacle import Obstacle
 
