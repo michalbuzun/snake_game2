@@ -55,7 +55,6 @@ while True:
         )
 
         for piece_mob, static_mob in colided_sprite.items():
-            print("colided object: ", static_mob[0].rect.bottomleft)
             snake.extend_snake(static_mob[0].rect.bottomleft)
 
             obstacle = Obstacle(screen)

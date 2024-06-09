@@ -17,6 +17,8 @@ class Snake(pygame.sprite.Sprite):
     def __init__(self, surface):
         super().__init__()
         self.surface = surface
+        self.surface_width = surface.get_width()
+        self.surface_height = surface.get_height()
         self.image = pygame.Surface((SNAKE_SIZE, SNAKE_SIZE))
         self.image.fill("red")
         self.rect = self.image.get_rect()
@@ -48,13 +50,28 @@ class Snake(pygame.sprite.Sprite):
 
         if self.divider % LEVEL_SPEED == 0:
             if self.direction == Direction.RIGHT:
-                self.rect.x += SNAKE_SIZE
+                if self.rect.x + SNAKE_SIZE >= self.surface_width:
+                    self.rect.x = 0
+                else:
+                    self.rect.x += SNAKE_SIZE
+
             if self.direction == Direction.LEFT:
-                self.rect.x -= SNAKE_SIZE
+                if self.rect.x - SNAKE_SIZE < 0:
+                    self.rect.x = self.surface_width - SNAKE_SIZE
+                else:
+                    self.rect.x -= SNAKE_SIZE
+
             if self.direction == Direction.UP:
-                self.rect.y -= SNAKE_SIZE
+                if self.rect.y - SNAKE_SIZE < 0:
+                    self.rect.y = self.surface_height - SNAKE_SIZE
+                else:
+                    self.rect.y -= SNAKE_SIZE
+
             if self.direction == Direction.DOWN:
-                self.rect.y += SNAKE_SIZE
+                if self.rect.y + SNAKE_SIZE >= self.surface_height:
+                    self.rect.y = 0
+                else:
+                    self.rect.y += SNAKE_SIZE
 
             self.previous_positions.append(self.rect.bottomleft)
             self.previous_positions.pop(0)
