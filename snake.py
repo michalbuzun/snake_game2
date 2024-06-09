@@ -26,29 +26,36 @@ class Snake(pygame.sprite.Sprite):
         self.direction = Direction.RIGHT
         self.divider = 0
         self.previous_positions = [(250, 200), (300, 200), (350, 200), (400, 200)]
+        self.next_move_possible = True
 
     def player_input(self):
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_UP] or keys[pygame.K_w]:
-            if self.direction != Direction.DOWN:
-                self.direction = Direction.UP
+        if self.next_move_possible:
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_UP] or keys[pygame.K_w]:
+                if self.direction != Direction.DOWN:
+                    self.direction = Direction.UP
+                    self.next_move_possible = False
 
-        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
-            if self.direction != Direction.UP:
-                self.direction = Direction.DOWN
+            if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+                if self.direction != Direction.UP:
+                    self.direction = Direction.DOWN
+                    self.next_move_possible = False
 
-        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            if self.direction != Direction.LEFT:
-                self.direction = Direction.RIGHT
+            if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+                if self.direction != Direction.LEFT:
+                    self.direction = Direction.RIGHT
+                    self.next_move_possible = False
 
-        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            if self.direction != Direction.RIGHT:
-                self.direction = Direction.LEFT
+            if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+                if self.direction != Direction.RIGHT:
+                    self.direction = Direction.LEFT
+                    self.next_move_possible = False
 
     def player_movement(self):
         self.divider += 1
 
         if self.divider % LEVEL_SPEED == 0:
+            self.next_move_possible = True
             if self.direction == Direction.RIGHT:
                 if self.rect.x + SNAKE_SIZE >= self.surface_width:
                     self.rect.x = 0
