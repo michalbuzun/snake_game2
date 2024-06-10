@@ -13,7 +13,7 @@ class Obstacle(pygame.sprite.Sprite):
         self.surface_height = surface.get_height()
 
         self.image = pygame.Surface((OBSTACLE_SIZE, OBSTACLE_SIZE))
-        self.image.fill("blue")
+        self.image.fill((70, 57, 86))
         self.rect = self.image.get_rect()
         self.rect.bottomleft = (
             random.randrange(0, self.surface_width - OBSTACLE_SIZE, OBSTACLE_SIZE),

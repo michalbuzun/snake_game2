@@ -39,7 +39,7 @@ while True:
                     game_active = True
 
     if game_active:
-        screen.fill((94, 129, 162))
+        screen.fill((145, 129, 162))
         snake_group.draw(screen)
         snake_group.update()
 

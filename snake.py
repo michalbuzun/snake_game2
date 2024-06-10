@@ -20,7 +20,7 @@ class Snake(pygame.sprite.Sprite):
         self.surface_width = surface.get_width()
         self.surface_height = surface.get_height()
         self.image = pygame.Surface((SNAKE_SIZE, SNAKE_SIZE))
-        self.image.fill("red")
+        self.image.fill((195, 226, 162))
         self.rect = self.image.get_rect()
         self.rect.bottomleft = (400, 200)
         self.direction = Direction.RIGHT
@@ -110,7 +110,7 @@ class Snake(pygame.sprite.Sprite):
 
             pygame.draw.rect(
                 self.surface,
-                "red",
+                (146, 162, 129),
                 position_rect,
             )
 
