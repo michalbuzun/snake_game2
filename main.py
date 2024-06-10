@@ -11,7 +11,6 @@ pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("snake")
 clock = pygame.time.Clock()
-test_font = pygame.font.Font("font/Pixeltype.ttf", 50)
 game_active = True
 
 
@@ -56,6 +55,8 @@ while True:
 
             obstacle = Obstacle(screen)
             obstacle_group.add(obstacle)
+
+        game_active = snake.is_alive()
 
     else:
         ...

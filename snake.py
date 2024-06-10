@@ -98,6 +98,7 @@ class Snake(pygame.sprite.Sprite):
                     self.rect.y += SNAKE_SIZE
 
             self.previous_positions.append(self.rect.bottomleft)
+            self.is_alive()
             self.previous_positions.pop(0)
 
     def render_player(self):
@@ -114,7 +115,18 @@ class Snake(pygame.sprite.Sprite):
             )
 
     def extend_snake(self, postion):
+        print("robak zjedzony")
         self.previous_positions.append(postion)
+
+    def is_alive(self):
+        print("all snake positions: ", self.previous_positions)
+        print("self.rect.bottomleft: ", self.rect.bottomleft)
+
+        for position in self.previous_positions[:-2]:
+            if self.rect.bottomleft == position:
+                return False
+
+        return True
 
     def update(self):
         self.player_input()
