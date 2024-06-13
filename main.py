@@ -59,7 +59,22 @@ while True:
         game_active = snake.is_alive()
 
     else:
-        ...
+        screen.fill((145, 129, 162))
+        font = pygame.font.SysFont("ubuntu", 30)
+        font_small = pygame.font.SysFont("ubuntu", 20)
+        gameover_message = font.render("Game over", False, (0, 0, 0))
+        gameover_message_rect = gameover_message.get_rect(
+            center=(WIDTH / 2, HEIGHT / 2 - 50)
+        )
+        screen.blit(gameover_message, gameover_message_rect)
+
+        play_again_message = font_small.render(
+            "Press space to start again", False, (0, 0, 0)
+        )
+        play_again_message_rect = play_again_message.get_rect(
+            center=(WIDTH / 2, HEIGHT / 2 + 20)
+        )
+        screen.blit(play_again_message, play_again_message_rect)
 
     # update everything
     pygame.display.update()
