@@ -64,6 +64,7 @@ class Snake(pygame.sprite.Sprite):
         self.level_length = LEVEL_LENGTH
         self.game_won = False
         self.score = 0
+        self.next_level_state = False
 
     def _wall_collision(self):
         if self.direction == Direction.RIGHT:
@@ -162,13 +163,16 @@ class Snake(pygame.sprite.Sprite):
         if len(self.previous_positions) >= LEVEL_LENGTH:
             self.score += LEVEL_LENGTH
 
-            if self.level + 1 >= TOP_LEVEL:
+            if self.level >= TOP_LEVEL:
                 self.game_won = True
             else:
+                self.next_level_state = True
+                print("pazue the game")
                 self.level += 1
                 self.previous_positions = SNAKE_INITIAL_POSITIONS[:]
                 self.rect.bottomleft = (400, 200)
                 self.direction = Direction.RIGHT
+                self.next_level_state = True
 
     def is_game_active(self):
         # check for colistion with self

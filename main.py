@@ -24,6 +24,9 @@ obstacle = Obstacle(screen)
 obstacle_group = pygame.sprite.Group()
 obstacle_group.add(obstacle)
 
+
+next_level_screen_display_start = None
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -41,31 +44,52 @@ while True:
     if game_active:
         screen.fill((145, 129, 162))
 
-        snake_group.draw(screen)
-        snake_group.update()
+        if snake.next_level_state:
+            if not next_level_screen_display_start:
+                next_level_screen_display_start = pygame.time.get_ticks()
+            next_level_message = font_small.render(
+                f"Next level: {snake.level}", False, (0, 0, 0)
+            )
+            next_level_message_rect = next_level_message.get_rect(
+                center=(WIDTH / 2, HEIGHT / 2)
+            )
+            screen.blit(next_level_message, next_level_message_rect)
 
-        obstacle_group.draw(screen)
-        obstacle_group.update()
+            if (
+                next_level_screen_display_start
+                and pygame.time.get_ticks() - next_level_screen_display_start >= 1000
+            ):
+                next_level_screen_display_start = None
+                snake.next_level_state = False
 
-        game_information = font_small.render(
-            f"Level: {snake.level} ({len(snake.previous_positions)}/{snake.level_length})",
-            False,
-            (0, 0, 0),
-        )
-        game_information_rect = game_information.get_rect(center=(WIDTH - 150, 0 + 20))
-        screen.blit(game_information, game_information_rect)
+        else:
+            snake_group.draw(screen)
+            snake_group.update()
 
-        colided_sprite = pygame.sprite.groupcollide(
-            snake_group, obstacle_group, False, True
-        )
+            obstacle_group.draw(screen)
+            obstacle_group.update()
 
-        for piece_mob, static_mob in colided_sprite.items():
-            snake.extend_snake(static_mob[0].rect.bottomleft)
+            game_information = font_small.render(
+                f"Level: {snake.level} ({len(snake.previous_positions)}/{snake.level_length})",
+                False,
+                (0, 0, 0),
+            )
+            game_information_rect = game_information.get_rect(
+                center=(WIDTH - 150, 0 + 20)
+            )
+            screen.blit(game_information, game_information_rect)
 
-            obstacle = Obstacle(screen)
-            obstacle_group.add(obstacle)
+            colided_sprite = pygame.sprite.groupcollide(
+                snake_group, obstacle_group, False, True
+            )
 
-        game_active = snake.is_game_active()
+            for piece_mob, static_mob in colided_sprite.items():
+                snake.extend_snake(static_mob[0].rect.bottomleft)
+
+                obstacle = Obstacle(screen)
+                obstacle_group.add(obstacle)
+
+            game_active = snake.is_game_active()
 
     else:
         screen.fill((145, 129, 162))
@@ -99,6 +123,11 @@ while True:
                 center=(WIDTH / 2, HEIGHT / 2 + 20)
             )
             screen.blit(play_again_message, play_again_message_rect)
+
+    if next_level_screen_display_start:
+        time_since_next_level_screen_dispalys = (
+            pygame.time.get_ticks() - next_level_screen_display_start
+        )
 
     pygame.display.update()
     clock.tick(60)
