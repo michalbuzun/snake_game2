@@ -6,6 +6,39 @@ SNAKE_SIZE = 50
 LEVEL_SPEED = 50
 
 
+LEVEL_SPEEDS = {
+    1: 50,
+    2: 30,
+    3: 20,
+    4: 10,
+    5: 9,
+    6: 8,
+    # 7: 7,
+    # 8: 6,
+    # 9: 5,
+    # 10: 4,
+    # 11: 3,
+    # 12: 2,
+    # 13: 1,
+}
+
+TOP_LEVEL = max(LEVEL_SPEEDS.keys())
+
+
+LEVEL_LENGTH = 10
+START_LEVEL = 5
+SNAKE_INITIAL_POSITIONS = [(250, 200), (300, 200), (350, 200), (400, 200)]
+SNAKE_INITIAL_POSITIONS_TEST = [
+    (100, 200),
+    (150, 200),
+    (200, 200),
+    (250, 200),
+    (300, 200),
+    (350, 200),
+    (400, 200),
+]
+
+
 class Direction(Enum):
     LEFT = auto()
     RIGHT = auto()
@@ -25,8 +58,12 @@ class Snake(pygame.sprite.Sprite):
         self.rect.bottomleft = (400, 200)
         self.direction = Direction.RIGHT
         self.divider = 0
-        self.previous_positions = [(250, 200), (300, 200), (350, 200), (400, 200)]
+        self.previous_positions = SNAKE_INITIAL_POSITIONS_TEST[:]
         self.next_move_possible = True
+        self.level = START_LEVEL
+        self.level_length = LEVEL_LENGTH
+        self.game_won = False
+        self.score = 0
 
     def _wall_collision(self):
         if self.direction == Direction.RIGHT:
@@ -71,7 +108,7 @@ class Snake(pygame.sprite.Sprite):
     def player_movement(self):
         self.divider += 1
 
-        if self.divider % LEVEL_SPEED == 0:
+        if self.divider % LEVEL_SPEEDS[self.level] == 0:
             self.next_move_possible = True
             if self.direction == Direction.RIGHT:
                 if self._wall_collision():
@@ -98,7 +135,6 @@ class Snake(pygame.sprite.Sprite):
                     self.rect.y += SNAKE_SIZE
 
             self.previous_positions.append(self.rect.bottomleft)
-            self.is_alive()
             self.previous_positions.pop(0)
 
     def render_player(self):
@@ -115,16 +151,34 @@ class Snake(pygame.sprite.Sprite):
             )
 
     def extend_snake(self, postion):
-        print("robak zjedzony")
         self.previous_positions.append(postion)
 
-    def is_alive(self):
-        print("all snake positions: ", self.previous_positions)
-        print("self.rect.bottomleft: ", self.rect.bottomleft)
+    def reset_game_state(self):
+        self.rect.bottomleft = (400, 200)
+        self.direction = Direction.RIGHT
+        self.previous_positions = SNAKE_INITIAL_POSITIONS[:]
 
-        for position in self.previous_positions[:-2]:
+    def check_for_next_level(self):
+        if len(self.previous_positions) >= LEVEL_LENGTH:
+            self.score += LEVEL_LENGTH
+
+            if self.level + 1 >= TOP_LEVEL:
+                self.game_won = True
+            else:
+                self.level += 1
+                self.previous_positions = SNAKE_INITIAL_POSITIONS[:]
+                self.rect.bottomleft = (400, 200)
+
+    def is_game_active(self):
+        # check for colistion with self
+        for position in self.previous_positions[:-3]:
             if self.rect.bottomleft == position:
+                self.reset_game_state()
                 return False
+
+        # check if game was won
+        if self.game_won:
+            return False
 
         return True
 
@@ -132,3 +186,4 @@ class Snake(pygame.sprite.Sprite):
         self.player_input()
         self.player_movement()
         self.render_player()
+        self.check_for_next_level()
