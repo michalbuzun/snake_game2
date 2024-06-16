@@ -168,6 +168,7 @@ class Snake(pygame.sprite.Sprite):
                 self.level += 1
                 self.previous_positions = SNAKE_INITIAL_POSITIONS[:]
                 self.rect.bottomleft = (400, 200)
+                self.direction = Direction.RIGHT
 
     def is_game_active(self):
         # check for colistion with self
