@@ -1,7 +1,6 @@
 import pygame
 import random
 
-from snake import Snake
 
 OBSTACLE_SIZE = 50
 

@@ -1,12 +1,16 @@
 import pygame
 from sys import exit
+from const import WIDTH, HEIGHT
 from snake import Snake
 from obstacle import Obstacle
+from helpers import (
+    draw_game_over_screen,
+    draw_game_won_screen,
+    draw_next_level_screen,
+    draw_game_information,
+)
 
-WIDTH = 800
-HEIGHT = 400
 
-# starts pygame
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("snake")
@@ -24,10 +28,10 @@ obstacle = Obstacle(screen, snake)
 obstacle_group = pygame.sprite.Group()
 obstacle_group.add(obstacle)
 
-
 next_level_screen_display_start = None
 
 while True:
+    screen.fill((145, 129, 162))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -47,18 +51,15 @@ while True:
                     game_active = True
 
     if game_active:
-        screen.fill((145, 129, 162))
-
         if snake.next_level_state:
             if not next_level_screen_display_start:
                 next_level_screen_display_start = pygame.time.get_ticks()
-            next_level_message = font_small.render(
-                f"Next level: {snake.level}", False, (0, 0, 0)
+            draw_next_level_screen(
+                font=font,
+                font_small=font_small,
+                screen=screen,
+                snake=snake,
             )
-            next_level_message_rect = next_level_message.get_rect(
-                center=(WIDTH / 2, HEIGHT / 2)
-            )
-            screen.blit(next_level_message, next_level_message_rect)
 
             if (
                 next_level_screen_display_start
@@ -74,15 +75,12 @@ while True:
             obstacle_group.draw(screen)
             obstacle_group.update()
 
-            game_information = font_small.render(
-                f"Level: {snake.level} ({len(snake.previous_positions)}/{snake.level_length})",
-                False,
-                (0, 0, 0),
+            draw_game_information(
+                font=font,
+                font_small=font_small,
+                screen=screen,
+                snake=snake,
             )
-            game_information_rect = game_information.get_rect(
-                center=(WIDTH - 150, 0 + 20)
-            )
-            screen.blit(game_information, game_information_rect)
 
             colided_sprite = pygame.sprite.groupcollide(
                 snake_group, obstacle_group, False, True
@@ -97,37 +95,20 @@ while True:
             game_active = snake.is_game_active()
 
     else:
-        screen.fill((145, 129, 162))
-
         if snake.game_won:
-            game_win_message = font.render("Game win", False, (0, 0, 0))
-            game_win_message_rect = game_win_message.get_rect(
-                center=(WIDTH / 2, HEIGHT / 2 - 50)
+            draw_game_won_screen(
+                font=font,
+                font_small=font_small,
+                screen=screen,
+                snake=snake,
             )
-            screen.blit(game_win_message, game_win_message_rect)
-
-            your_score_message = font_small.render(
-                f"Your score: {snake.score}", False, (0, 0, 0)
-            )
-            your_score_message_rect = your_score_message.get_rect(
-                center=(WIDTH / 2, HEIGHT / 2 + 20)
-            )
-            screen.blit(your_score_message, your_score_message_rect)
 
         else:
-            gameover_message = font.render("Game over", False, (0, 0, 0))
-            gameover_message_rect = gameover_message.get_rect(
-                center=(WIDTH / 2, HEIGHT / 2 - 50)
+            draw_game_over_screen(
+                font=font,
+                font_small=font_small,
+                screen=screen,
             )
-            screen.blit(gameover_message, gameover_message_rect)
-
-            play_again_message = font_small.render(
-                "Press space to start again", False, (0, 0, 0)
-            )
-            play_again_message_rect = play_again_message.get_rect(
-                center=(WIDTH / 2, HEIGHT / 2 + 20)
-            )
-            screen.blit(play_again_message, play_again_message_rect)
 
     if next_level_screen_display_start:
         time_since_next_level_screen_dispalys = (

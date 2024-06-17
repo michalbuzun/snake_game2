@@ -83,7 +83,7 @@ class Snake(pygame.sprite.Sprite):
             if self.rect.y + SNAKE_SIZE >= self.surface_height:
                 return True
 
-    def player_input(self):
+    def _player_input(self):
         if self.next_move_possible:
             keys = pygame.key.get_pressed()
             if keys[pygame.K_UP] or keys[pygame.K_w]:
@@ -106,7 +106,7 @@ class Snake(pygame.sprite.Sprite):
                     self.direction = Direction.LEFT
                     self.next_move_possible = False
 
-    def player_movement(self):
+    def _player_movement(self):
         self.divider += 1
 
         if self.divider % LEVEL_SPEEDS[self.level] == 0:
@@ -138,7 +138,7 @@ class Snake(pygame.sprite.Sprite):
             self.previous_positions.append(self.rect.bottomleft)
             self.previous_positions.pop(0)
 
-    def render_player(self):
+    def _render_player(self):
         for position in self.previous_positions:
             position_rect = pygame.Rect(
                 position[0], position[1], SNAKE_SIZE, SNAKE_SIZE
@@ -169,7 +169,7 @@ class Snake(pygame.sprite.Sprite):
         self.direction = Direction.RIGHT
         self.previous_positions = SNAKE_INITIAL_POSITIONS[:]
 
-    def check_for_next_level(self):
+    def _check_for_next_level(self):
         if len(self.previous_positions) >= LEVEL_LENGTH:
             self.score += LEVEL_LENGTH
 
@@ -200,7 +200,7 @@ class Snake(pygame.sprite.Sprite):
         return True
 
     def update(self):
-        self.player_input()
-        self.player_movement()
-        self.render_player()
-        self.check_for_next_level()
+        self._player_input()
+        self._player_movement()
+        self._render_player()
+        self._check_for_next_level()
