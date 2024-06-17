@@ -26,7 +26,7 @@ TOP_LEVEL = max(LEVEL_SPEEDS.keys())
 
 
 LEVEL_LENGTH = 10
-START_LEVEL = 5
+START_LEVEL = 6
 SNAKE_INITIAL_POSITIONS = [(250, 200), (300, 200), (350, 200), (400, 200)]
 SNAKE_INITIAL_POSITIONS_TEST = [
     (100, 200),
@@ -154,7 +154,17 @@ class Snake(pygame.sprite.Sprite):
     def extend_snake(self, postion):
         self.previous_positions.append(postion)
 
-    def reset_game_state(self):
+    def restart_full_game(self):
+        self.rect.bottomleft = (400, 200)
+        self.direction = Direction.RIGHT
+        self.previous_positions = SNAKE_INITIAL_POSITIONS[:]
+
+        self.level = START_LEVEL
+        self.game_won = False
+        self.score = 0
+        self.next_level_state = False
+
+    def restart_level(self):
         self.rect.bottomleft = (400, 200)
         self.direction = Direction.RIGHT
         self.previous_positions = SNAKE_INITIAL_POSITIONS[:]
@@ -178,7 +188,7 @@ class Snake(pygame.sprite.Sprite):
         # check for colistion with self
         for position in self.previous_positions[:-3]:
             if self.rect.bottomleft == position:
-                self.reset_game_state()
+                self.restart_level()
                 return False
 
         # check if game was won

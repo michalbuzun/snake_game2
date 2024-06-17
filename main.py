@@ -39,6 +39,11 @@ while True:
         else:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
+                    if snake.game_won:
+                        snake.restart_full_game()
+                    else:
+                        snake.restart_level()
+
                     game_active = True
 
     if game_active:
