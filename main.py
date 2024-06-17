@@ -20,7 +20,7 @@ snake = Snake(screen)
 snake_group = pygame.sprite.GroupSingle()
 snake_group.add(snake)
 
-obstacle = Obstacle(screen)
+obstacle = Obstacle(screen, snake)
 obstacle_group = pygame.sprite.Group()
 obstacle_group.add(obstacle)
 
@@ -91,7 +91,7 @@ while True:
             for piece_mob, static_mob in colided_sprite.items():
                 snake.extend_snake(static_mob[0].rect.bottomleft)
 
-                obstacle = Obstacle(screen)
+                obstacle = Obstacle(screen, snake)
                 obstacle_group.add(obstacle)
 
             game_active = snake.is_game_active()

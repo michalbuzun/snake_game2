@@ -177,15 +177,17 @@ class Snake(pygame.sprite.Sprite):
                 self.game_won = True
             else:
                 self.next_level_state = True
-                print("pazue the game")
                 self.level += 1
                 self.previous_positions = SNAKE_INITIAL_POSITIONS[:]
                 self.rect.bottomleft = (400, 200)
                 self.direction = Direction.RIGHT
                 self.next_level_state = True
 
+    def is_inside_snake(self, position):
+        return position in self.previous_positions
+
     def is_game_active(self):
-        # check for colistion with self
+        # check for collision with self
         for position in self.previous_positions[:-3]:
             if self.rect.bottomleft == position:
                 self.restart_level()
