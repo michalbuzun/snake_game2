@@ -3,30 +3,27 @@ from enum import Enum, auto
 
 
 SNAKE_SIZE = 50
-LEVEL_SPEED = 50
 
 
 LEVEL_SPEEDS = {
-    1: 50,
-    2: 30,
-    3: 20,
-    4: 10,
-    5: 9,
-    6: 8,
-    # 7: 7,
-    # 8: 6,
-    # 9: 5,
-    # 10: 4,
-    # 11: 3,
-    # 12: 2,
-    # 13: 1,
+    1: 20,
+    2: 10,
+    3: 9,
+    4: 8,
+    5: 7,
+    6: 6,
+    7: 5,
+    8: 4,
+    9: 3,
+    10: 2,
+    11: 1,
 }
 
 TOP_LEVEL = max(LEVEL_SPEEDS.keys())
 
 
 LEVEL_LENGTH = 10
-START_LEVEL = 6
+START_LEVEL = 1
 SNAKE_INITIAL_POSITIONS = [(250, 200), (300, 200), (350, 200), (400, 200)]
 SNAKE_INITIAL_POSITIONS_TEST = [
     (100, 200),
@@ -168,6 +165,7 @@ class Snake(pygame.sprite.Sprite):
         self.rect.bottomleft = (400, 200)
         self.direction = Direction.RIGHT
         self.previous_positions = SNAKE_INITIAL_POSITIONS[:]
+        self.score = 0
 
     def _check_for_next_level(self):
         if len(self.previous_positions) >= LEVEL_LENGTH:
